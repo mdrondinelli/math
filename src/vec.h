@@ -7,9 +7,9 @@
 #include <cstdint>
 
 #include <type_traits>
+#include <utility>
 
 #include "scalar.h"
-#include "unreachable.h"
 
 namespace marlon {
 namespace math {
@@ -59,7 +59,7 @@ template <typename T> struct Vec<T, 2> {
     case 1:
       return y;
     default:
-      unreachable();
+      std::unreachable();
     }
   }
 
@@ -71,7 +71,7 @@ template <typename T> struct Vec<T, 2> {
     case 1:
       return y;
     default:
-      unreachable();
+      std::unreachable();
     }
   }
 };
@@ -132,7 +132,7 @@ template <typename T> struct Vec<T, 3> {
     case 2:
       return z;
     default:
-      unreachable();
+      std::unreachable();
     }
   }
 
@@ -146,7 +146,7 @@ template <typename T> struct Vec<T, 3> {
     case 2:
       return z;
     default:
-      unreachable();
+      std::unreachable();
     }
   }
 
@@ -231,7 +231,7 @@ template <typename T> struct Vec<T, 4> {
     case 3:
       return w;
     default:
-      unreachable();
+      std::unreachable();
     }
   }
 
@@ -247,7 +247,7 @@ template <typename T> struct Vec<T, 4> {
     case 3:
       return w;
     default:
-      unreachable();
+      std::unreachable();
     }
   }
 
