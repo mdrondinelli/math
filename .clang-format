@@ -1,0 +1,6 @@
+AllowAllArgumentsOnNextLine: true
+AllowShortFunctionsOnASingleLine: Empty
+BinPackArguments: false
+BinPackParameters: false
+PackConstructorInitializers: NextLineOnly
+ColumnLimit: 80
