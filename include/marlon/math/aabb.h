@@ -3,7 +3,7 @@
 
 #include "vec.h"
 
-namespace marlon::math {
+namespace marlon {
 template <typename T, int N> struct Aabb {
   Vec<T, N> min;
   Vec<T, N> max;
@@ -91,6 +91,6 @@ inline bool overlaps(Aabb<T, N> const &first,
   }
   return true;
 }
-} // namespace marlon::math
+} // namespace marlon
 
 #endif

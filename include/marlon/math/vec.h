@@ -12,7 +12,6 @@
 #include "scalar.h"
 
 namespace marlon {
-namespace math {
 static_assert(sizeof(float) == 4);
 static_assert(sizeof(double) == 8);
 
@@ -267,12 +266,33 @@ template <typename T> using Vec4 = Vec<T, 4>;
 using Vec2i = Vec2<std::int32_t>;
 using Vec3i = Vec3<std::int32_t>;
 using Vec4i = Vec4<std::int32_t>;
+using Vec2u = Vec2<std::uint32_t>;
+using Vec3u = Vec3<std::uint32_t>;
+using Vec4u = Vec4<std::uint32_t>;
 using Vec2f = Vec2<float>;
 using Vec3f = Vec3<float>;
 using Vec4f = Vec4<float>;
 using Vec2d = Vec2<double>;
 using Vec3d = Vec3<double>;
 using Vec4d = Vec4<double>;
+using Vec2i8 = Vec2<std::int8_t>;
+using Vec3i8 = Vec3<std::int8_t>;
+using Vec4i8 = Vec4<std::int8_t>;
+using Vec2u8 = Vec2<std::uint8_t>;
+using Vec3u8 = Vec3<std::uint8_t>;
+using Vec4u8 = Vec4<std::uint8_t>;
+using Vec2i16 = Vec2<std::int16_t>;
+using Vec3i16 = Vec3<std::int16_t>;
+using Vec4i16 = Vec4<std::int16_t>;
+using Vec2u16 = Vec2<std::uint16_t>;
+using Vec3u16 = Vec3<std::uint16_t>;
+using Vec4u16 = Vec4<std::uint16_t>;
+using Vec2i32 = Vec2<std::int32_t>;
+using Vec3i32 = Vec3<std::int32_t>;
+using Vec4i32 = Vec4<std::int32_t>;
+using Vec2u32 = Vec2<std::uint32_t>;
+using Vec3u32 = Vec3<std::uint32_t>;
+using Vec4u32 = Vec4<std::uint32_t>;
 
 static_assert(std::is_standard_layout_v<Vec2i>);
 static_assert(offsetof(Vec2i, x) == 0);
@@ -291,6 +311,24 @@ static_assert(offsetof(Vec4i, y) == 4);
 static_assert(offsetof(Vec4i, z) == 8);
 static_assert(offsetof(Vec4i, w) == 12);
 static_assert(sizeof(Vec4i) == 16);
+
+static_assert(std::is_standard_layout_v<Vec2u>);
+static_assert(offsetof(Vec2u, x) == 0);
+static_assert(offsetof(Vec2u, y) == 4);
+static_assert(sizeof(Vec2u) == 8);
+
+static_assert(std::is_standard_layout_v<Vec3u>);
+static_assert(offsetof(Vec3u, x) == 0);
+static_assert(offsetof(Vec3u, y) == 4);
+static_assert(offsetof(Vec3u, z) == 8);
+static_assert(sizeof(Vec3u) == 12);
+
+static_assert(std::is_standard_layout_v<Vec4u>);
+static_assert(offsetof(Vec4u, x) == 0);
+static_assert(offsetof(Vec4u, y) == 4);
+static_assert(offsetof(Vec4u, z) == 8);
+static_assert(offsetof(Vec4u, w) == 12);
+static_assert(sizeof(Vec4u) == 16);
 
 static_assert(std::is_standard_layout_v<Vec2f>);
 static_assert(offsetof(Vec2f, x) == 0);
@@ -327,6 +365,114 @@ static_assert(offsetof(Vec4d, y) == 8);
 static_assert(offsetof(Vec4d, z) == 16);
 static_assert(offsetof(Vec4d, w) == 24);
 static_assert(sizeof(Vec4d) == 32);
+
+static_assert(std::is_standard_layout_v<Vec2i8>);
+static_assert(offsetof(Vec2i8, x) == 0);
+static_assert(offsetof(Vec2i8, y) == 1);
+static_assert(sizeof(Vec2i8) == 2);
+
+static_assert(std::is_standard_layout_v<Vec3i8>);
+static_assert(offsetof(Vec3i8, x) == 0);
+static_assert(offsetof(Vec3i8, y) == 1);
+static_assert(offsetof(Vec3i8, z) == 2);
+static_assert(sizeof(Vec3i8) == 3);
+
+static_assert(std::is_standard_layout_v<Vec4i8>);
+static_assert(offsetof(Vec4i8, x) == 0);
+static_assert(offsetof(Vec4i8, y) == 1);
+static_assert(offsetof(Vec4i8, z) == 2);
+static_assert(offsetof(Vec4i8, w) == 3);
+static_assert(sizeof(Vec4i8) == 4);
+
+static_assert(std::is_standard_layout_v<Vec2u8>);
+static_assert(offsetof(Vec2u8, x) == 0);
+static_assert(offsetof(Vec2u8, y) == 1);
+static_assert(sizeof(Vec2u8) == 2);
+
+static_assert(std::is_standard_layout_v<Vec3u8>);
+static_assert(offsetof(Vec3u8, x) == 0);
+static_assert(offsetof(Vec3u8, y) == 1);
+static_assert(offsetof(Vec3u8, z) == 2);
+static_assert(sizeof(Vec3u8) == 3);
+
+static_assert(std::is_standard_layout_v<Vec4u8>);
+static_assert(offsetof(Vec4u8, x) == 0);
+static_assert(offsetof(Vec4u8, y) == 1);
+static_assert(offsetof(Vec4u8, z) == 2);
+static_assert(offsetof(Vec4u8, w) == 3);
+static_assert(sizeof(Vec4u8) == 4);
+
+static_assert(std::is_standard_layout_v<Vec2i16>);
+static_assert(offsetof(Vec2i16, x) == 0);
+static_assert(offsetof(Vec2i16, y) == 2);
+static_assert(sizeof(Vec2i16) == 4);
+
+static_assert(std::is_standard_layout_v<Vec3i16>);
+static_assert(offsetof(Vec3i16, x) == 0);
+static_assert(offsetof(Vec3i16, y) == 2);
+static_assert(offsetof(Vec3i16, z) == 4);
+static_assert(sizeof(Vec3i16) == 6);
+
+static_assert(std::is_standard_layout_v<Vec4i16>);
+static_assert(offsetof(Vec4i16, x) == 0);
+static_assert(offsetof(Vec4i16, y) == 2);
+static_assert(offsetof(Vec4i16, z) == 4);
+static_assert(offsetof(Vec4i16, w) == 6);
+static_assert(sizeof(Vec4i16) == 8);
+
+static_assert(std::is_standard_layout_v<Vec2u16>);
+static_assert(offsetof(Vec2u16, x) == 0);
+static_assert(offsetof(Vec2u16, y) == 2);
+static_assert(sizeof(Vec2u16) == 4);
+
+static_assert(std::is_standard_layout_v<Vec3u16>);
+static_assert(offsetof(Vec3u16, x) == 0);
+static_assert(offsetof(Vec3u16, y) == 2);
+static_assert(offsetof(Vec3u16, z) == 4);
+static_assert(sizeof(Vec3u16) == 6);
+
+static_assert(std::is_standard_layout_v<Vec4u16>);
+static_assert(offsetof(Vec4u16, x) == 0);
+static_assert(offsetof(Vec4u16, y) == 2);
+static_assert(offsetof(Vec4u16, z) == 4);
+static_assert(offsetof(Vec4u16, w) == 6);
+static_assert(sizeof(Vec4u16) == 8);
+
+static_assert(std::is_standard_layout_v<Vec2i32>);
+static_assert(offsetof(Vec2i32, x) == 0);
+static_assert(offsetof(Vec2i32, y) == 4);
+static_assert(sizeof(Vec2i32) == 8);
+
+static_assert(std::is_standard_layout_v<Vec3i32>);
+static_assert(offsetof(Vec3i32, x) == 0);
+static_assert(offsetof(Vec3i32, y) == 4);
+static_assert(offsetof(Vec3i32, z) == 8);
+static_assert(sizeof(Vec3i32) == 12);
+
+static_assert(std::is_standard_layout_v<Vec4i32>);
+static_assert(offsetof(Vec4i32, x) == 0);
+static_assert(offsetof(Vec4i32, y) == 4);
+static_assert(offsetof(Vec4i32, z) == 8);
+static_assert(offsetof(Vec4i32, w) == 12);
+static_assert(sizeof(Vec4i32) == 16);
+
+static_assert(std::is_standard_layout_v<Vec2u32>);
+static_assert(offsetof(Vec2u32, x) == 0);
+static_assert(offsetof(Vec2u32, y) == 4);
+static_assert(sizeof(Vec2u32) == 8);
+
+static_assert(std::is_standard_layout_v<Vec3u32>);
+static_assert(offsetof(Vec3u32, x) == 0);
+static_assert(offsetof(Vec3u32, y) == 4);
+static_assert(offsetof(Vec3u32, z) == 8);
+static_assert(sizeof(Vec3u32) == 12);
+
+static_assert(std::is_standard_layout_v<Vec4u32>);
+static_assert(offsetof(Vec4u32, x) == 0);
+static_assert(offsetof(Vec4u32, y) == 4);
+static_assert(offsetof(Vec4u32, z) == 8);
+static_assert(offsetof(Vec4u32, w) == 12);
+static_assert(sizeof(Vec4u32) == 16);
 
 template <typename T, int N>
 constexpr bool operator==(Vec<T, N> const &u, Vec<T, N> const &v) noexcept {
@@ -470,7 +616,6 @@ clamp(Vec<T, N> const &v, Vec<T, N> const &lo, Vec<T, N> const &hi) noexcept {
 template <typename T, int N> constexpr auto abs(Vec<T, N> const &v) noexcept {
   return Vec<T, N>{[&](int i) { return abs(v[i]); }};
 }
-} // namespace math
 } // namespace marlon
 
 #endif

@@ -9,7 +9,6 @@
 #include "vec.h"
 
 namespace marlon {
-namespace math {
 template <typename T> struct Quat {
   T w;
   Vec<T, 3> v;
@@ -135,7 +134,6 @@ template <typename T> constexpr auto deg_to_rad(T deg) noexcept {
 template <typename T> constexpr auto rad_to_deg(T rad) noexcept {
   return rad * (T(180) / std::numbers::pi_v<T>);
 }
-} // namespace math
 } // namespace marlon
 
 #endif

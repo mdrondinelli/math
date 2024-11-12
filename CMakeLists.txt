@@ -15,4 +15,5 @@ add_executable(
   src/quat.cpp
   src/vec.cpp
 )
+target_include_directories(tests PRIVATE include/marlon/math)
 target_link_libraries(tests Catch2::Catch2WithMain)

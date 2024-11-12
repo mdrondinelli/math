@@ -6,7 +6,6 @@
 #include <concepts>
 
 namespace marlon {
-namespace math {
 template <typename T> constexpr T const &min(T const &a, T const &b) noexcept {
   return a < b ? a : b;
 }
@@ -39,7 +38,6 @@ template <typename T> T tan(T x) noexcept {
 template <std::floating_point T> bool isinf(T x) noexcept {
   return std::isinf(x);
 }
-} // namespace math
 } // namespace marlon
 
 #endif

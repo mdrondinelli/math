@@ -5,7 +5,6 @@
 #include <catch2/catch_test_macros.hpp>
 
 namespace marlon {
-namespace math {
 TEST_CASE("Quaternions can be constructed.") {
   const Quatf p{4.0f, {1.0f, 2.0f, 3.0f}};
   REQUIRE(p.w == 4.0f);
@@ -74,7 +73,6 @@ TEST_CASE("Quaternions can be normalized.") {
   auto const q = normalize(p);
   REQUIRE(q == Quatf::identity());
 }
-} // namespace math
 } // namespace marlon
 
 #endif

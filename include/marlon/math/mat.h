@@ -6,7 +6,7 @@
 #include "quat.h"
 #include "vec.h"
 
-namespace marlon::math {
+namespace marlon {
 template <typename T, int N> class Rvec;
 
 template <typename T> class Rvec<T, 2> {
@@ -212,7 +212,7 @@ public:
     }
   }
 
-  static constexpr auto translation(math::Vec3<T> const &t) noexcept {
+  static constexpr auto translation(Vec3<T> const &t) noexcept {
     static_assert(M == 4);
     return Mat<T, 3, 4>{
         {T(1), T(0), T(0), t.x},
@@ -363,7 +363,7 @@ public:
     };
   }
 
-  static constexpr auto translation(math::Vec3<T> const &t) noexcept {
+  static constexpr auto translation(Vec3<T> const &t) noexcept {
     static_assert(M == 4);
     return Mat<T, 4, 4>{Mat<T, 3, 4>::translation(t), {T(0), T(0), T(0), T(1)}};
   }
@@ -399,6 +399,17 @@ public:
     return Mat<T, 4, 4>{
         Mat<T, 3, 4>::orthographic(l, r, b, t, n, f),
         {T(0), T(0), T(0), T(1)},
+    };
+  }
+
+  static constexpr auto perspective(Vec2<T> const &zoom,
+                                    T near_plane_distance) noexcept {
+    static_assert(M == 4);
+    return Mat<T, 4, 4>{
+        {zoom.x, 0.0f, 0.0f, 0.0f},
+        {0.0f, -zoom.y, 0.0f, 0.0f},
+        {0.0f, 0.0f, 0.0f, near_plane_distance},
+        {0.0f, 0.0f, -1.0f, 0.0f},
     };
   }
 
@@ -667,7 +678,7 @@ constexpr Vec<T, N> column(Mat<T, N, M> const &m, int j) noexcept {
 }
 
 template <typename T, int N, int M>
-constexpr Mat<T, N, M> abs(math::Mat<T, N, M> const &m) noexcept {
+constexpr Mat<T, N, M> abs(Mat<T, N, M> const &m) noexcept {
   auto retval = Mat<T, N, M>::zero();
   for (auto i = 0; i < N; ++i) {
     retval[i] = abs(m[i]);
@@ -676,7 +687,7 @@ constexpr Mat<T, N, M> abs(math::Mat<T, N, M> const &m) noexcept {
 }
 
 template <typename T, int N, int M>
-constexpr Mat<T, M, N> transpose(math::Mat<T, N, M> const &m) noexcept {
+constexpr Mat<T, M, N> transpose(Mat<T, N, M> const &m) noexcept {
   auto retval = Mat<T, M, N>::zero();
   for (auto i = 0; i < M; ++i) {
     for (auto j = 0; j < N; ++j) {
@@ -686,20 +697,17 @@ constexpr Mat<T, M, N> transpose(math::Mat<T, N, M> const &m) noexcept {
   return retval;
 }
 
-template <typename T>
-constexpr T determinant(math::Mat<T, 2, 2> const &m) noexcept {
+template <typename T> constexpr T determinant(Mat<T, 2, 2> const &m) noexcept {
   return m[0][0] * m[1][1] - m[0][1] * m[1][0];
 }
 
-template <typename T>
-constexpr T determinant(math::Mat<T, 3, 3> const &m) noexcept {
+template <typename T> constexpr T determinant(Mat<T, 3, 3> const &m) noexcept {
   return m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) -
          m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) +
          m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
 }
 
-template <typename T>
-constexpr T determinant(math::Mat<T, 4, 4> const &m) noexcept {
+template <typename T> constexpr T determinant(Mat<T, 4, 4> const &m) noexcept {
   return m[0][0] * (m[1][1] * (m[2][2] * m[3][3] - m[2][3] * m[3][2]) +
                     m[1][2] * (m[2][3] * m[3][1] - m[2][1] * m[3][3]) +
                     m[1][3] * (m[2][1] * m[3][2] - m[2][2] * m[3][1])) -
@@ -715,116 +723,167 @@ constexpr T determinant(math::Mat<T, 4, 4> const &m) noexcept {
 }
 
 template <typename T>
-constexpr Mat<T, 2, 2> cofactors(math::Mat<T, 2, 2> const &m) noexcept {
+constexpr Mat<T, 2, 2> cofactors(Mat<T, 2, 2> const &m) noexcept {
   return {{m[1][1], -m[1][0]}, {-m[0][1], m[0][0]}};
 }
 
 template <typename T>
-constexpr Mat<T, 3, 3> cofactors(math::Mat<T, 3, 3> const &m) noexcept {
-  return {{determinant(Mat<T, 2, 2>{{m[1][1], m[1][2]}, {m[2][1], m[2][2]}}),
-           -determinant(Mat<T, 2, 2>{{m[1][0], m[1][2]}, {m[2][0], m[2][2]}}),
-           determinant(Mat<T, 2, 2>{{m[1][0], m[1][1]}, {m[2][0], m[2][1]}})},
-          {-determinant(Mat<T, 2, 2>{{m[0][1], m[0][2]}, {m[2][1], m[2][2]}}),
-           determinant(Mat<T, 2, 2>{{m[0][0], m[0][2]}, {m[2][0], m[2][2]}}),
-           -determinant(Mat<T, 2, 2>{{m[0][0], m[0][1]}, {m[2][0], m[2][1]}})},
-          {determinant(Mat<T, 2, 2>{{m[0][1], m[0][2]}, {m[1][1], m[1][2]}}),
-           -determinant(Mat<T, 2, 2>{{m[0][0], m[0][2]}, {m[1][0], m[1][2]}}),
-           determinant(Mat<T, 2, 2>{{m[0][0], m[0][1]}, {m[1][0], m[1][1]}})}};
+constexpr Mat<T, 3, 3> cofactors(Mat<T, 3, 3> const &m) noexcept {
+  return {
+      {
+          determinant(Mat<T, 2, 2>{{m[1][1], m[1][2]}, {m[2][1], m[2][2]}}),
+          -determinant(Mat<T, 2, 2>{{m[1][0], m[1][2]}, {m[2][0], m[2][2]}}),
+          determinant(Mat<T, 2, 2>{{m[1][0], m[1][1]}, {m[2][0], m[2][1]}}),
+      },
+      {
+          -determinant(Mat<T, 2, 2>{{m[0][1], m[0][2]}, {m[2][1], m[2][2]}}),
+          determinant(Mat<T, 2, 2>{{m[0][0], m[0][2]}, {m[2][0], m[2][2]}}),
+          -determinant(Mat<T, 2, 2>{{m[0][0], m[0][1]}, {m[2][0], m[2][1]}}),
+      },
+      {
+          determinant(Mat<T, 2, 2>{{m[0][1], m[0][2]}, {m[1][1], m[1][2]}}),
+          -determinant(Mat<T, 2, 2>{{m[0][0], m[0][2]}, {m[1][0], m[1][2]}}),
+          determinant(Mat<T, 2, 2>{{m[0][0], m[0][1]}, {m[1][0], m[1][1]}}),
+      },
+  };
 }
 
 template <typename T, int N>
-constexpr Mat<T, N, N> adjoint(math::Mat<T, N, N> const &m) noexcept {
+constexpr Mat<T, N, N> adjoint(Mat<T, N, N> const &m) noexcept {
   return transpose(cofactors(m));
 }
 
 template <typename T, int N>
-constexpr Mat<T, N, N> inverse(math::Mat<T, N, N> const &m) noexcept {
+constexpr Mat<T, N, N> inverse(Mat<T, N, N> const &m) noexcept {
   return adjoint(m) / determinant(m);
 }
 
 template <typename T>
-constexpr Mat<T, 3, 4> rigid_inverse(math::Mat<T, 3, 4> const &m) noexcept {
-  auto const translation = math::Vec3f{m[0][3], m[1][3], m[2][3]};
-  auto const retval_upper_left = math::Mat3x3f{{m[0][0], m[1][0], m[2][0]},
-                                               {m[0][1], m[1][1], m[2][1]},
-                                               {m[0][2], m[1][2], m[2][2]}};
-  return {{retval_upper_left[0][0],
-           retval_upper_left[0][1],
-           retval_upper_left[0][2],
-           -(retval_upper_left[0] * translation)},
-          {retval_upper_left[1][0],
-           retval_upper_left[1][1],
-           retval_upper_left[1][2],
-           -(retval_upper_left[1] * translation)},
-          {retval_upper_left[2][0],
-           retval_upper_left[2][1],
-           retval_upper_left[2][2],
-           -(retval_upper_left[2] * translation)}};
+constexpr Mat<T, 3, 4> rigid_inverse(Mat<T, 3, 4> const &m) noexcept {
+  auto const translation = Vec3f{m[0][3], m[1][3], m[2][3]};
+  auto const retval_upper_left = Mat3x3f{
+      {m[0][0], m[1][0], m[2][0]},
+      {m[0][1], m[1][1], m[2][1]},
+      {m[0][2], m[1][2], m[2][2]},
+  };
+  return {
+      {
+          retval_upper_left[0][0],
+          retval_upper_left[0][1],
+          retval_upper_left[0][2],
+          -(retval_upper_left[0] * translation),
+      },
+      {
+          retval_upper_left[1][0],
+          retval_upper_left[1][1],
+          retval_upper_left[1][2],
+          -(retval_upper_left[1] * translation),
+      },
+      {
+          retval_upper_left[2][0],
+          retval_upper_left[2][1],
+          retval_upper_left[2][2],
+          -(retval_upper_left[2] * translation),
+      },
+  };
 }
 
 template <typename T>
-constexpr Mat<T, 4, 4> rigid_inverse(math::Mat<T, 4, 4> const &m) noexcept {
-  auto const translation = math::Vec3f{m[0][3], m[1][3], m[2][3]};
-  auto const retval_upper_left = math::Mat3x3f{{m[0][0], m[1][0], m[2][0]},
-                                               {m[0][1], m[1][1], m[2][1]},
-                                               {m[0][2], m[1][2], m[2][2]}};
-  return {{retval_upper_left[0][0],
-           retval_upper_left[0][1],
-           retval_upper_left[0][2],
-           -(retval_upper_left[0] * translation)},
-          {retval_upper_left[1][0],
-           retval_upper_left[1][1],
-           retval_upper_left[1][2],
-           -(retval_upper_left[1] * translation)},
-          {retval_upper_left[2][0],
-           retval_upper_left[2][1],
-           retval_upper_left[2][2],
-           -(retval_upper_left[2] * translation)},
-          {T(0), T(0), T(0), T(1)}};
+constexpr Mat<T, 4, 4> rigid_inverse(Mat<T, 4, 4> const &m) noexcept {
+  auto const translation = Vec3f{m[0][3], m[1][3], m[2][3]};
+  auto const retval_upper_left = Mat3x3f{
+      {m[0][0], m[1][0], m[2][0]},
+      {m[0][1], m[1][1], m[2][1]},
+      {m[0][2], m[1][2], m[2][2]},
+  };
+  return {
+      {
+          retval_upper_left[0][0],
+          retval_upper_left[0][1],
+          retval_upper_left[0][2],
+          -(retval_upper_left[0] * translation),
+      },
+      {
+          retval_upper_left[1][0],
+          retval_upper_left[1][1],
+          retval_upper_left[1][2],
+          -(retval_upper_left[1] * translation),
+      },
+      {
+          retval_upper_left[2][0],
+          retval_upper_left[2][1],
+          retval_upper_left[2][2],
+          -(retval_upper_left[2] * translation),
+      },
+      {
+          T(0),
+          T(0),
+          T(0),
+          T(1),
+      },
+  };
 }
 
 template <typename T>
-constexpr Mat<T, 3, 4> affine_inverse(math::Mat<T, 3, 4> const &m) noexcept {
-  auto const translation = math::Vec3f{m[0][3], m[1][3], m[2][3]};
-  auto const retval_upper_left =
-      inverse(math::Mat3x3f{{m[0][0], m[0][1], m[0][2]},
-                            {m[1][0], m[1][1], m[1][2]},
-                            {m[2][0], m[2][1], m[2][2]}});
-  return {{retval_upper_left[0][0],
-           retval_upper_left[0][1],
-           retval_upper_left[0][2],
-           -(retval_upper_left[0] * translation)},
-          {retval_upper_left[1][0],
-           retval_upper_left[1][1],
-           retval_upper_left[1][2],
-           -(retval_upper_left[1] * translation)},
-          {retval_upper_left[2][0],
-           retval_upper_left[2][1],
-           retval_upper_left[2][2],
-           -(retval_upper_left[2] * translation)}};
+constexpr Mat<T, 3, 4> affine_inverse(Mat<T, 3, 4> const &m) noexcept {
+  auto const translation = Vec3f{m[0][3], m[1][3], m[2][3]};
+  auto const retval_upper_left = inverse(Mat3x3f{
+      {m[0][0], m[0][1], m[0][2]},
+      {m[1][0], m[1][1], m[1][2]},
+      {m[2][0], m[2][1], m[2][2]},
+  });
+  return {
+      {
+          retval_upper_left[0][0],
+          retval_upper_left[0][1],
+          retval_upper_left[0][2],
+          -(retval_upper_left[0] * translation),
+      },
+      {
+          retval_upper_left[1][0],
+          retval_upper_left[1][1],
+          retval_upper_left[1][2],
+          -(retval_upper_left[1] * translation),
+      },
+      {
+          retval_upper_left[2][0],
+          retval_upper_left[2][1],
+          retval_upper_left[2][2],
+          -(retval_upper_left[2] * translation),
+      },
+  };
 }
 
 template <typename T>
-constexpr Mat<T, 4, 4> affine_inverse(math::Mat<T, 4, 4> const &m) noexcept {
-  auto const translation = math::Vec3f{m[0][3], m[1][3], m[2][3]};
-  auto const retval_upper_left =
-      inverse(math::Mat3x3f{{m[0][0], m[0][1], m[0][2]},
-                            {m[1][0], m[1][1], m[1][2]},
-                            {m[2][0], m[2][1], m[2][2]}});
-  return {{retval_upper_left[0][0],
-           retval_upper_left[0][1],
-           retval_upper_left[0][2],
-           -(retval_upper_left[0] * translation)},
-          {retval_upper_left[1][0],
-           retval_upper_left[1][1],
-           retval_upper_left[1][2],
-           -(retval_upper_left[1] * translation)},
-          {retval_upper_left[2][0],
-           retval_upper_left[2][1],
-           retval_upper_left[2][2],
-           -(retval_upper_left[2] * translation)},
-          {T(0), T(0), T(0), T(1)}};
+constexpr Mat<T, 4, 4> affine_inverse(Mat<T, 4, 4> const &m) noexcept {
+  auto const translation = Vec3f{m[0][3], m[1][3], m[2][3]};
+  auto const retval_upper_left = inverse(Mat3x3f{
+      {m[0][0], m[0][1], m[0][2]},
+      {m[1][0], m[1][1], m[1][2]},
+      {m[2][0], m[2][1], m[2][2]},
+  });
+  return {
+      {
+          retval_upper_left[0][0],
+          retval_upper_left[0][1],
+          retval_upper_left[0][2],
+          -(retval_upper_left[0] * translation),
+      },
+      {
+          retval_upper_left[1][0],
+          retval_upper_left[1][1],
+          retval_upper_left[1][2],
+          -(retval_upper_left[1] * translation),
+      },
+      {
+          retval_upper_left[2][0],
+          retval_upper_left[2][1],
+          retval_upper_left[2][2],
+          -(retval_upper_left[2] * translation),
+      },
+      {T(0), T(0), T(0), T(1)},
+  };
 }
-} // namespace marlon::math
+} // namespace marlon
 
 #endif

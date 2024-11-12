@@ -3,7 +3,6 @@
 #include <catch2/catch_test_macros.hpp>
 
 namespace marlon {
-namespace math {
 static_assert(sizeof(Vec2i) == 8);
 static_assert(sizeof(Vec2f) == 8);
 static_assert(sizeof(Vec2d) == 16);
@@ -82,5 +81,4 @@ TEST_CASE("The length of a vector can be taken") {
   const Vec2i u{3, 4};
   REQUIRE(length(u) == 5);
 }
-} // namespace math
 } // namespace marlon

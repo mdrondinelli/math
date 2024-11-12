@@ -3,7 +3,6 @@
 #include <catch2/catch_test_macros.hpp>
 
 namespace marlon {
-namespace math {
 static_assert(sizeof(Mat2x2i) == 16);
 static_assert(sizeof(Mat2x2f) == 16);
 static_assert(sizeof(Mat2x2d) == 32);
@@ -39,5 +38,4 @@ TEST_CASE("Matrices can be multiplied") {
                    {3 * 5 + 4 * 7, 3 * 6 + 4 * 8}};
   REQUIRE(a * b == ab);
 }
-} // namespace math
 } // namespace marlon
