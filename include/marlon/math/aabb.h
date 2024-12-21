@@ -2,6 +2,7 @@
 #define MARLON_MATH_AABB_BOUNDS_H
 
 #include "vec.h"
+#include <cstddef>
 
 namespace marlon {
 template <typename T, int N> struct Aabb {
@@ -31,6 +32,19 @@ using Aabb2f = Aabb<float, 2>;
 using Aabb3f = Aabb<float, 3>;
 using Aabb2d = Aabb<double, 2>;
 using Aabb3d = Aabb<double, 3>;
+
+static_assert(sizeof(Aabb2f) == 16);
+static_assert(offsetof(Aabb2f, min) == 0);
+static_assert(offsetof(Aabb2f, max) == 8);
+static_assert(sizeof(Aabb3f) == 24);
+static_assert(offsetof(Aabb3f, min) == 0);
+static_assert(offsetof(Aabb3f, max) == 12);
+static_assert(sizeof(Aabb2d) == 32);
+static_assert(offsetof(Aabb2d, min) == 0);
+static_assert(offsetof(Aabb2d, max) == 16);
+static_assert(sizeof(Aabb3d) == 48);
+static_assert(offsetof(Aabb3d, min) == 0);
+static_assert(offsetof(Aabb3d, max) == 24);
 
 template <typename T, int N>
 inline Vec<T, N> center(Aabb<T, N> const &box) noexcept {
